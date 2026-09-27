@@ -6,7 +6,7 @@
   const differentLabel = script.dataset.label || '🎧 Listen to a different podcast';
   const base = new URL('./', script.src);
   const dataUrl = new URL('podcasts/' + bank + '.json', base).href;
-  const slug = base.pathname.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'root';
+  const slug = (base.pathname.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'root').toLowerCase();
   const AUDIO_CACHE = 'podcast-audio-' + slug + '-' + bank + '-v1';
   const STORAGE_KEY = 'offline-podcast-' + slug + '-' + bank + '-v1';
   const RECENT_LIMIT = 6;

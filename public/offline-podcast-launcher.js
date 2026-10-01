@@ -8,6 +8,15 @@
   const appId = explicitAppId && explicitAppId !== 'unknown' ? explicitAppId : fallbackAppId;
   const PARRIS_PREF_KEY = 'parris.ui.preferences.v2:' + appId;
   try {
+    const returned = new URL(location.href).searchParams.get('parrisPrefs');
+    if (returned) {
+      const incoming = JSON.parse(returned);
+      localStorage.setItem(PARRIS_PREF_KEY, JSON.stringify({
+        podcasts: Boolean(incoming.podcasts),
+        portals: Boolean(incoming.portals),
+        network: Boolean(incoming.network),
+      }));
+    }
     const parrisPrefs = JSON.parse(localStorage.getItem(PARRIS_PREF_KEY) || '{}');
     if (parrisPrefs.podcasts !== true) return;
   } catch {

@@ -42,6 +42,14 @@
     "platform": "GitHub Pages"
   },
   {
+    "url": "https://joshualparris.github.io/Cheappcslaptops/",
+    "names": [
+      "CHEAP//PC",
+      "joshualparris/Cheappcslaptops"
+    ],
+    "platform": "GitHub Pages"
+  },
+  {
     "url": "https://parris-tech-services.github.io/DCSCompanion/",
     "names": [
       "DCSCompanion",
@@ -428,6 +436,14 @@
     "platform": "GitHub Pages"
   },
   {
+    "url": "https://parris-tech-services.github.io/rothfuss-kkc-adventure/",
+    "names": [
+      "Rothfuss KKC Adventure",
+      "Parris-Tech-Services/rothfuss-kkc-adventure"
+    ],
+    "platform": "GitHub Pages"
+  },
+  {
     "url": "https://parris-tech-services.github.io/kkc-adventure/",
     "names": [
       "rothfuss-kkc-adventure",
@@ -511,6 +527,20 @@
       "joshuaparrisdadlan-stack/OrgScape"
     ],
     "platform": "itch.io"
+  },
+  {
+    "url": "https://dbo1-sim.lovable.app/",
+    "names": [
+      "DBO1-SIM"
+    ],
+    "platform": "Lovable"
+  },
+  {
+    "url": "https://rothfuss-kkc-adventure-production.up.railway.app/",
+    "names": [
+      "Rothfuss KKC Adventure (Railway)"
+    ],
+    "platform": "Railway"
   },
   {
     "url": "https://joshdashboard2-3d63fzekflg2wlakjmrakz.streamlit.app/",
@@ -682,6 +712,20 @@
     "url": "https://joshhorses.vercel.app/",
     "names": [
       "JoshHorses"
+    ],
+    "platform": "Vercel"
+  },
+  {
+    "url": "https://josh-hub-joshualparris-projects.vercel.app/",
+    "names": [
+      "JoshHub production alias"
+    ],
+    "platform": "Vercel"
+  },
+  {
+    "url": "https://skill-deploy-wn74y0trpc-codex-agent-deploys.vercel.app",
+    "names": [
+      "JoshSim Life Simulator"
     ],
     "platform": "Vercel"
   },
@@ -1051,6 +1095,13 @@
     "names": [
       "SylvieApp",
       "Parris-Tech-Services/SylvieApp"
+    ],
+    "platform": "Vercel"
+  },
+  {
+    "url": "https://skill-deploy-gzaqtty7hb-codex-agent-deploys.vercel.app",
+    "names": [
+      "Takeaway Tonight"
     ],
     "platform": "Vercel"
   },

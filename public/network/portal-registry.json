@@ -158,6 +158,10 @@
       {
         "to": "lantern-road",
         "flavour": "A forest track straightens into a lantern-lit frontier road."
+      },
+      {
+        "to": "buckland-blocks",
+        "flavour": "The roots square off into perfect blocks. The world becomes buildable."
       }
     ]
   },
@@ -246,6 +250,28 @@
       {
         "to": "car-game",
         "flavour": "A gate becomes asphalt. An engine turns over on the other side."
+      },
+      {
+        "to": "buckland-blocks",
+        "flavour": "One realm resolves into cubes, tools and a horizon you can reshape."
+      }
+    ]
+  },
+  "buckland-blocks": {
+    "label": "Buckland Blocks",
+    "url": "https://buckland-blocks.vercel.app/",
+    "portals": [
+      {
+        "to": "whirring-wilderness",
+        "flavour": "The last block breaks open onto a forest whose trees hum like machinery."
+      },
+      {
+        "to": "eleven-realms",
+        "flavour": "A mined tunnel ends at a gate facing eleven different skies."
+      },
+      {
+        "to": "car-game",
+        "flavour": "Stone gives way to asphalt. An engine is already running."
       }
     ]
   }

@@ -1,8 +1,22 @@
 (() => {
   const script = document.currentScript;
   if (!script) return;
-  const PARRIS_PREF_KEY = 'parris.ui.preferences.v1';
+  const explicitAppId = script.dataset.appId || window.PortalAdapter?.getGameId?.();
+  const fallbackAppId = location.hostname.endsWith('github.io')
+    ? (location.pathname.split('/').filter(Boolean)[0] || location.hostname)
+    : location.hostname + location.pathname.replace(/\/$/, '');
+  const appId = explicitAppId && explicitAppId !== 'unknown' ? explicitAppId : fallbackAppId;
+  const PARRIS_PREF_KEY = 'parris.ui.preferences.v2:' + appId;
   try {
+    const returned = new URL(location.href).searchParams.get('parrisPrefs');
+    if (returned) {
+      const incoming = JSON.parse(returned);
+      localStorage.setItem(PARRIS_PREF_KEY, JSON.stringify({
+        podcasts: Boolean(incoming.podcasts),
+        portals: Boolean(incoming.portals),
+        network: Boolean(incoming.network),
+      }));
+    }
     const parrisPrefs = JSON.parse(localStorage.getItem(PARRIS_PREF_KEY) || '{}');
     if (parrisPrefs.podcasts !== true) return;
   } catch {

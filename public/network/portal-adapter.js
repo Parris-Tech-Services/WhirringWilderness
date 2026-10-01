@@ -15,6 +15,7 @@ const PortalAdapter=(()=>{
     script.src=SHELL;
     script.async=true;
     script.dataset.parrisNetwork="true";
+    script.dataset.appId=GAME_ID;
     (document.head||document.documentElement).appendChild(script);
   }
 

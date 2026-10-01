@@ -86,12 +86,14 @@ const PortalAdapter=(()=>{
     launcher.textContent="⬡ Portals";
     launcher.setAttribute("aria-label","Open cross-game portals");
     // Keep the launcher above podcast controls if both are enabled.
-    Object.assign(launcher.style,{position:"fixed",left:"12px",bottom:"72px",zIndex:"2147483646",padding:"9px 12px",borderRadius:"999px",border:"1px solid rgba(167,139,250,.45)",background:"rgba(24,12,48,.94)",color:"#ede9fe",font:"600 12px system-ui",cursor:"pointer",boxShadow:"0 8px 30px #0006"});
+    const portalBottom=podcastsEnabled()?"72px":"12px";
+    Object.assign(launcher.style,{position:"fixed",left:"12px",bottom:portalBottom,zIndex:"2147483646",padding:"9px 12px",borderRadius:"999px",border:"1px solid rgba(167,139,250,.45)",background:"rgba(24,12,48,.94)",color:"#ede9fe",font:"600 12px system-ui",cursor:"pointer",boxShadow:"0 8px 30px #0006"});
 
     const panel=document.createElement("div");
     panel.id="parris-portal-panel";
     panel.hidden=true;
-    Object.assign(panel.style,{position:"fixed",left:"12px",bottom:"118px",zIndex:"2147483646",width:"min(320px,calc(100vw - 24px))",maxHeight:"60vh",overflow:"auto",padding:"14px",borderRadius:"16px",border:"1px solid rgba(167,139,250,.35)",background:"rgba(10,5,25,.97)",color:"#ede9fe",boxShadow:"0 18px 50px #0009",font:"13px system-ui"});
+    const panelBottom=podcastsEnabled()?"118px":"58px";
+    Object.assign(panel.style,{position:"fixed",left:"12px",bottom:panelBottom,zIndex:"2147483646",width:"min(320px,calc(100vw - 24px))",maxHeight:"60vh",overflow:"auto",padding:"14px",borderRadius:"16px",border:"1px solid rgba(167,139,250,.35)",background:"rgba(10,5,25,.97)",color:"#ede9fe",boxShadow:"0 18px 50px #0009",font:"13px system-ui"});
     const title=document.createElement("div");title.textContent="Cross from "+world.label;Object.assign(title.style,{fontWeight:"800",marginBottom:"8px"});
     panel.appendChild(title);
     world.portals.forEach(route=>renderLink(route.to,panel,registry[route.to]?.label||route.to));

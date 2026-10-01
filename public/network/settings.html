@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>App Settings — Parris Network</title>
+<style>
+:root{color-scheme:dark;--bg:#07101d;--panel:#111c2f;--line:#29364c;--text:#f8fafc;--muted:#94a3b8;--accent:#67e8f9}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0,#172554 0,transparent 34%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:680px;margin:auto;padding:28px 16px 70px}.back{display:inline-block;color:#cbd5e1;text-decoration:none;margin-bottom:18px}.card{border:1px solid var(--line);border-radius:24px;background:rgba(15,23,42,.92);padding:24px;box-shadow:0 24px 70px #0005}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800}h1{font-size:clamp(30px,7vw,46px);line-height:1.05;margin:8px 0 10px}.lead{color:#cbd5e1;margin:0 0 22px}.row{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:18px 0;border-top:1px solid var(--line)}.row:first-of-type{border-top:0}.copy h2{font-size:16px;margin:0 0 4px}.copy p{color:var(--muted);font-size:13px;margin:0;max-width:460px}
+.switch{position:relative;display:inline-block;width:52px;height:30px;flex:0 0 52px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:#334155;cursor:pointer;transition:.2s}.slider:before{content:"";position:absolute;width:22px;height:22px;left:4px;top:4px;border-radius:50%;background:white;transition:.2s}.switch input:checked+.slider{background:#0891b2}.switch input:checked+.slider:before{transform:translateX(22px)}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.btn{border:0;border-radius:999px;padding:11px 17px;font:700 14px system-ui;cursor:pointer;text-decoration:none}.primary{background:white;color:#0f172a}.secondary{background:#1e293b;color:white;border:1px solid #334155}.note{margin-top:18px;color:#94a3b8;font-size:12px}.saved{display:none;margin-top:14px;color:#86efac;font-weight:700}.saved.show{display:block}
+</style>
+</head>
+<body>
+<main>
+<a class="back" id="backLink" href="./">← Back</a>
+<section class="card">
+<div class="kicker">Parris Network · App settings</div>
+<h1 id="title">Settings</h1>
+<p class="lead">Extra overlays stay off unless you choose to turn them on. Your choice is stored only in this browser for this app.</p>
+
+<div id="podcastsRow" class="row">
+  <div class="copy"><h2>Podcasts</h2><p>Show podcast access inside the single tools menu. No separate podcast pill.</p></div>
+  <label class="switch"><input id="podcasts" type="checkbox"><span class="slider"></span></label>
+</div>
+<div id="portalsRow" class="row">
+  <div class="copy"><h2>Portals</h2><p>Show cross-game portal destinations inside the same tools menu.</p></div>
+  <label class="switch"><input id="portals" type="checkbox"><span class="slider"></span></label>
+</div>
+<div id="networkRow" class="row">
+  <div class="copy"><h2>Parris Network</h2><p>Show a link to the full games-and-apps directory inside the tools menu.</p></div>
+  <label class="switch"><input id="network" type="checkbox"><span class="slider"></span></label>
+</div>
+
+<div class="actions">
+  <button class="btn primary" id="save" type="button">Save & return</button>
+  <button class="btn secondary" id="allOff" type="button">Turn everything off</button>
+</div>
+<div class="saved" id="saved">Saved.</div>
+<p class="note">When every option is off, the app shows only a small settings gear. If you enable anything, that same control becomes one tools menu instead of adding more floating buttons.</p>
+</section>
+</main>
+<script>
+const params=new URLSearchParams(location.search);
+const app=params.get("app")||"This app";
+const returnUrl=params.get("return")||"./";
+const rawPrefs=params.get("prefs");
+let prefs={podcasts:false,portals:false,network:false};
+try{prefs={...prefs,...JSON.parse(rawPrefs||"{}")}}catch{}
+const capabilities=new Set((params.get("capabilities")||"network").split(",").filter(Boolean));
+
+document.title="Settings — "+app;
+document.getElementById("title").textContent="Settings — "+app;
+document.getElementById("backLink").href=returnUrl;
+
+for(const key of ["podcasts","portals","network"]){
+  const row=document.getElementById(key+"Row");
+  const input=document.getElementById(key);
+  if(!capabilities.has(key)){row.hidden=true;input.checked=false;}
+  else input.checked=Boolean(prefs[key]);
+}
+
+function current(){
+  return {
+    podcasts:capabilities.has("podcasts")&&document.getElementById("podcasts").checked,
+    portals:capabilities.has("portals")&&document.getElementById("portals").checked,
+    network:capabilities.has("network")&&document.getElementById("network").checked
+  };
+}
+function goBack(next){
+  const target=new URL(returnUrl,location.href);
+  target.searchParams.set("parrisPrefs",JSON.stringify(next));
+  location.href=target.toString();
+}
+document.getElementById("save").addEventListener("click",()=>goBack(current()));
+document.getElementById("allOff").addEventListener("click",()=>goBack({podcasts:false,portals:false,network:false}));
+</script>
+</body>
+</html>

@@ -1,6 +1,13 @@
 (() => {
   const script = document.currentScript;
   if (!script) return;
+  const PARRIS_PREF_KEY = 'parris.ui.preferences.v1';
+  try {
+    const parrisPrefs = JSON.parse(localStorage.getItem(PARRIS_PREF_KEY) || '{}');
+    if (parrisPrefs.podcasts !== true) return;
+  } catch {
+    return;
+  }
   const bank = script.dataset.bank || (script.dataset.topics || '').split(',')[0] || 'dnd';
   const buttonLabel = script.dataset.launcherLabel || '🎧 Podcasts';
   const differentLabel = script.dataset.label || '🎧 Listen to a different podcast';

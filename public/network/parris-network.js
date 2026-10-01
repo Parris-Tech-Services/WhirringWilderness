@@ -7,8 +7,22 @@
   if(window.__PARRIS_UI_SHELL__) return;
   window.__PARRIS_UI_SHELL__=true;
 
-  const PREF_KEY="parris.ui.preferences.v1";
+  const source=document.currentScript;
   const DEFAULTS={podcasts:false,portals:false,network:false};
+
+  function appId(){
+    const explicit=source?.dataset?.appId;
+    if(explicit) return explicit;
+    const portalId=window.PortalAdapter?.getGameId?.();
+    if(portalId && portalId!=="unknown") return portalId;
+    if(location.hostname.endsWith("github.io")){
+      return location.pathname.split("/").filter(Boolean)[0]||location.hostname;
+    }
+    return location.hostname+location.pathname.replace(/\/$/,"");
+  }
+
+  const APP_ID=appId();
+  const PREF_KEY="parris.ui.preferences.v2:"+APP_ID;
   const SETTINGS_BASE="https://parris-tech-services.github.io/WhirringWilderness/network/settings.html";
   const NETWORK_URL="https://parris-tech-services.github.io/WhirringWilderness/network/";
 
@@ -50,6 +64,7 @@
   function settingsUrl(prefs){
     const url=new URL(SETTINGS_BASE);
     url.searchParams.set("app",appLabel());
+    url.searchParams.set("appId",APP_ID);
     url.searchParams.set("return",location.href);
     url.searchParams.set("prefs",JSON.stringify(prefs));
     const hasPodcast=Boolean(
@@ -57,12 +72,10 @@
       document.querySelector('script[src*="podcast"]') ||
       window.JoshPodcastDock
     );
-    url.searchParams.set(
-      "capabilities",
-      window.PortalAdapter
-        ? "podcasts,portals,network"
-        : (hasPodcast ? "podcasts,network" : "network")
-    );
+    const capabilities=["network"];
+    if(hasPodcast) capabilities.unshift("podcasts");
+    if(window.PortalAdapter?.getRoutes) capabilities.splice(hasPodcast?1:0,0,"portals");
+    url.searchParams.set("capabilities",capabilities.join(","));
     return url.toString();
   }
 

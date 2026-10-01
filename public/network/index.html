@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parris Network</title>
+<meta name="description" content="A connected directory of Josh Parris's deployed games and apps.">
+<style>
+:root{color-scheme:dark;--bg:#070b14;--panel:#0f172a;--line:#263247;--text:#eef2ff;--muted:#94a3b8;--accent:#67e8f9;--violet:#a78bfa}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#172554 0,transparent 30%),radial-gradient(circle at 90% 10%,#3b0764 0,transparent 28%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1180px;margin:auto;padding:32px 18px 80px}.hero{padding:34px;border:1px solid var(--line);border-radius:28px;background:rgba(15,23,42,.86);box-shadow:0 24px 80px #0006}
+.kicker{text-transform:uppercase;letter-spacing:.22em;color:var(--accent);font-size:12px;font-weight:800}h1{font-size:clamp(38px,7vw,72px);line-height:.98;margin:10px 0 16px}.lead{max-width:760px;color:#cbd5e1;font-size:18px}
+.stats,.filters{display:flex;flex-wrap:wrap;gap:8px}.pill,button{border:1px solid var(--line);background:#111827;color:#e2e8f0;border-radius:999px;padding:8px 12px}.stats{margin-top:20px}.filters{margin:24px 0 14px}
+input{width:100%;margin-top:22px;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:#020617;color:white;font:inherit}
+button{cursor:pointer}button.active{background:white;color:#0f172a}.count{color:var(--muted);margin:12px 2px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}.card{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.9)}.platform{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:800}.name{font-weight:800;font-size:18px;margin:6px 0}.url{color:var(--muted);font-size:12px;word-break:break-all}.open{display:inline-block;margin-top:14px;padding:8px 12px;border-radius:999px;background:#f8fafc;color:#0f172a;text-decoration:none;font-weight:800}.aliases{margin-top:10px;color:#94a3b8;font-size:12px}
+.toplinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.toplinks a{color:white;text-decoration:none;border:1px solid #ffffff2b;border-radius:999px;padding:9px 13px}.toplinks a.primary{background:#7c3aed;border-color:#7c3aed}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+<div class="kicker">Parris Network</div>
+<h1>Every world. One web.</h1>
+<p class="lead">A recovered and growing index of deployed games and apps. Use this as the shared crossroads between projects, then jump back into a completely different repo, engine or play style.</p>
+<div class="stats" id="stats"></div>
+<div class="toplinks"><a class="primary" href="./portal.html?from=network&to=whirring-wilderness">Enter a game portal ⬡</a><a href="./deployments.json">Raw registry JSON</a><a href="https://josh-hub-two.vercel.app/">JoshHub</a></div>
+<input id="search" type="search" placeholder="Search project, repo or URL…" autocomplete="off">
+<div class="filters" id="filters"></div>
+<div class="count" id="count"></div>
+</section>
+<section class="grid" id="grid" style="margin-top:18px"></section>
+</main>
+<script>
+const state={items:[],platform:"All",query:""};
+const platforms=["All","Vercel","GitHub Pages","itch.io","Streamlit"];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function render(){
+ const q=state.query.toLowerCase();
+ const items=state.items.filter(x=>(state.platform==="All"||x.platform===state.platform)&&(!q||[x.url,x.platform,...x.names].join(" ").toLowerCase().includes(q)));
+ document.getElementById("count").textContent="Showing "+items.length+" of "+state.items.length+" recovered deployment links";
+ document.getElementById("grid").innerHTML=items.map(x=>'<article class="card"><div class="platform">'+esc(x.platform)+'</div><div class="name">'+esc(x.names[0]||x.url)+'</div><div class="url">'+esc(x.url)+'</div><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noreferrer">Open ↗</a>'+(x.names.length>1?'<div class="aliases">Also mapped as: '+esc(x.names.slice(1).join(" · "))+'</div>':"")+'</article>').join("");
+ [...document.querySelectorAll("[data-platform]")].forEach(b=>b.classList.toggle("active",b.dataset.platform===state.platform));
+}
+fetch("./deployments.json",{cache:"no-store"}).then(r=>r.json()).then(items=>{
+ state.items=items;
+ const counts=Object.fromEntries(platforms.slice(1).map(p=>[p,items.filter(x=>x.platform===p).length]));
+ document.getElementById("stats").innerHTML='<span class="pill">'+items.length+' unique links</span>'+platforms.slice(1).map(p=>'<span class="pill">'+p+': '+counts[p]+'</span>').join("");
+ document.getElementById("filters").innerHTML=platforms.map(p=>'<button type="button" data-platform="'+p+'">'+p+'</button>').join("");
+ document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("[data-platform]");if(!b)return;state.platform=b.dataset.platform;render()});
+ document.getElementById("search").addEventListener("input",e=>{state.query=e.target.value;render()});
+ render();
+}).catch(err=>{document.getElementById("count").textContent="Could not load deployment registry.";console.error(err)});
+</script>
+</body>
+</html>

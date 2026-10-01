@@ -1,7 +1,12 @@
 (() => {
   const script = document.currentScript;
   if (!script) return;
-  const PARRIS_PREF_KEY = 'parris.ui.preferences.v1';
+  const explicitAppId = script.dataset.appId || window.PortalAdapter?.getGameId?.();
+  const fallbackAppId = location.hostname.endsWith('github.io')
+    ? (location.pathname.split('/').filter(Boolean)[0] || location.hostname)
+    : location.hostname + location.pathname.replace(/\/$/, '');
+  const appId = explicitAppId && explicitAppId !== 'unknown' ? explicitAppId : fallbackAppId;
+  const PARRIS_PREF_KEY = 'parris.ui.preferences.v2:' + appId;
   try {
     const parrisPrefs = JSON.parse(localStorage.getItem(PARRIS_PREF_KEY) || '{}');
     if (parrisPrefs.podcasts !== true) return;

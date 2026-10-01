@@ -5,7 +5,7 @@
 const PortalAdapter=(()=>{
   const HUB="https://parris-tech-services.github.io/WhirringWilderness/network/portal.html";
   const REGISTRY="https://parris-tech-services.github.io/WhirringWilderness/network/portal-registry.json";
-  const SHELL="https://parris-tech-services.github.io/WhirringWilderness/network/parris-network.js";
+  const SHELL="https://parris-tech-services.github.io/WhirringWilderness/network/parris-network.js?v=2.1";
   let GAME_ID="unknown";
   let registryPromise=null;
 

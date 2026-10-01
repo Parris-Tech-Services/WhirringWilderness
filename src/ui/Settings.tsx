@@ -20,6 +20,28 @@ interface SettingsState {
 }
 
 const STORAGE_KEY = 'ww_settings';
+const INTEGRATION_PREF_KEY = 'parris.ui.preferences.v2:whirring-wilderness';
+const INTEGRATION_SETTINGS_URL =
+  'https://parris-tech-services.github.io/WhirringWilderness/network/settings.html';
+
+function getIntegrationSettingsUrl(): string {
+  const url = new URL(INTEGRATION_SETTINGS_URL);
+  let prefs = { podcasts: false, portals: false, network: false };
+
+  try {
+    const stored = JSON.parse(localStorage.getItem(INTEGRATION_PREF_KEY) || '{}');
+    prefs = { ...prefs, ...stored };
+  } catch {
+    // Keep all optional overlays off by default.
+  }
+
+  url.searchParams.set('app', 'Whispering Wilds');
+  url.searchParams.set('appId', 'whirring-wilderness');
+  url.searchParams.set('return', window.location.href);
+  url.searchParams.set('prefs', JSON.stringify(prefs));
+  url.searchParams.set('capabilities', 'podcasts,portals,network');
+  return url.toString();
+}
 
 function loadSettings(): Partial<SettingsState> {
   try {
@@ -182,6 +204,22 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
               />
               <span>Show compact log tags (Story / Combat / Quest)</span>
             </label>
+          </section>
+
+          <section className="ww-settings-section">
+            <h3>Connected UI</h3>
+            <p className="ww-settings-note">
+              Podcasts, Portals and Parris Network are off by default so they do not cover game controls.
+              Turn them on only for this game from its separate interface settings page.
+            </p>
+            <div style={{ marginTop: 8 }}>
+              <a
+                className="ww-button ww-button-secondary"
+                href={getIntegrationSettingsUrl()}
+              >
+                Open interface settings
+              </a>
+            </div>
           </section>
 
           <section className="ww-settings-section">

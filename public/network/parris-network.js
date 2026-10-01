@@ -52,7 +52,17 @@
     url.searchParams.set("app",appLabel());
     url.searchParams.set("return",location.href);
     url.searchParams.set("prefs",JSON.stringify(prefs));
-    url.searchParams.set("capabilities",window.PortalAdapter?"podcasts,portals,network":"podcasts,network");
+    const hasPodcast=Boolean(
+      document.getElementById("offline-podcast-launcher") ||
+      document.querySelector('script[src*="podcast"]') ||
+      window.JoshPodcastDock
+    );
+    url.searchParams.set(
+      "capabilities",
+      window.PortalAdapter
+        ? "podcasts,portals,network"
+        : (hasPodcast ? "podcasts,network" : "network")
+    );
     return url.toString();
   }
 

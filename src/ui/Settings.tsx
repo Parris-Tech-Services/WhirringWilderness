@@ -185,6 +185,22 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
           </section>
 
           <section className="ww-settings-section">
+            <h3>Connected UI</h3>
+            <p className="ww-settings-note">
+              Portals and the Parris Network are hidden by default so they do not cover game controls
+              or the podcast launcher.
+            </p>
+            <div style={{ marginTop: 8 }}>
+              <a
+                className="ww-button ww-button-secondary"
+                href="./?parris-settings=1"
+              >
+                Open interface settings
+              </a>
+            </div>
+          </section>
+
+          <section className="ww-settings-section">
             <h3>Accessibility</h3>
             <p className="ww-settings-note">
               Keyboard navigation: Use Tab to navigate, Enter/Space to activate buttons, Escape to

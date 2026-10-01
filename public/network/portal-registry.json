@@ -1,0 +1,252 @@
+{
+  "whispering-wilds": {
+    "label": "Whispering Wilds",
+    "url": "https://joshuaparrisdadlan-stack.github.io/whispering-wilds/",
+    "portals": [
+      {
+        "to": "null",
+        "flavour": "The forest exhales. The trees thin to wire. Silence arrives like a wall."
+      },
+      {
+        "to": "mystery-depths",
+        "flavour": "The roots descend. The soil becomes cold water. Something ancient stirs below."
+      },
+      {
+        "to": "infinite-office",
+        "flavour": "The break room window opens onto something green. You climb through the glass."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "The trees lean inward. A stair descends where no stair stood before."
+      }
+    ]
+  },
+  "null": {
+    "label": "Null",
+    "url": "https://joshuaparrisdadlan-stack.github.io/Null/",
+    "portals": [
+      {
+        "to": "whispering-wilds",
+        "flavour": "The rope slackens. Green arrives. Noise."
+      },
+      {
+        "to": "infinite-office",
+        "flavour": "The rope becomes a lanyard. The silence becomes a hum. Fluorescent."
+      },
+      {
+        "to": "mystery-depths",
+        "flavour": "The beads are cold. Very cold. The ground is gone."
+      }
+    ]
+  },
+  "mystery-depths": {
+    "label": "Mystery Depths",
+    "url": "https://joshuaparrisdadlan-stack.github.io/MysteriousDepths/",
+    "portals": [
+      {
+        "to": "whispering-wilds",
+        "flavour": "The water drains upward. Roots. Leaves. Light."
+      },
+      {
+        "to": "wastes-courier",
+        "flavour": "The seabed cracks. Dust pours in. You are standing in a wasteland."
+      },
+      {
+        "to": "null",
+        "flavour": "There is no sound here. There never was."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "Stone closes overhead. The water becomes a wet street under an impossible city."
+      }
+    ]
+  },
+  "infinite-office": {
+    "label": "The Infinite Office",
+    "url": "https://joshuaparrisdadlan-stack.github.io/OrgScape/",
+    "portals": [
+      {
+        "to": "null",
+        "flavour": "The fluorescents cut out. The lanyard becomes rope. The silence is total."
+      },
+      {
+        "to": "whispering-wilds",
+        "flavour": "The break room window opens onto something green. You climb through."
+      }
+    ]
+  },
+  "wastes-courier": {
+    "label": "Wastes Courier",
+    "url": "https://wastes-courier-roguelike.vercel.app/",
+    "portals": [
+      {
+        "to": "mystery-depths",
+        "flavour": "The parcel dissolves. Salt water. Dark."
+      },
+      {
+        "to": "whispering-wilds",
+        "flavour": "The wasteland softens. Green overtakes the road."
+      },
+      {
+        "to": "breach-command",
+        "flavour": "A courier beacon becomes a tactical marker. The horizon resolves into a breach map."
+      }
+    ]
+  },
+  "simple-rpg": {
+    "label": "Simple RPG",
+    "url": "https://joshuaparrisdadlan-stack.github.io/LetsPlayDnd/",
+    "portals": [
+      {
+        "to": "whispering-wilds",
+        "flavour": "The dungeon opens. Stone becomes bark."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "A forgotten stairwell goes down farther than the dungeon should allow."
+      }
+    ]
+  },
+  "midnight-line": {
+    "label": "The Midnight Line",
+    "url": "https://josh-hub-two.vercel.app/games/midnight-line/index.html",
+    "portals": [
+      {
+        "to": "null",
+        "flavour": "The lights go out. The station disappears. Rope. Silence."
+      },
+      {
+        "to": "mystery-depths",
+        "flavour": "The platform descends. The train never surfaces."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "The final carriage opens onto a platform beneath a city that should not exist."
+      }
+    ]
+  },
+  "starhaven": {
+    "label": "Starhaven",
+    "url": "https://josh-hub-two.vercel.app/games/starhaven/",
+    "portals": [
+      {
+        "to": "midnight-line",
+        "flavour": "The stars rearrange. You are on a train. It is very late."
+      },
+      {
+        "to": "mystery-depths",
+        "flavour": "The telescope points down instead of up. Below is ocean."
+      },
+      {
+        "to": "eleven-realms",
+        "flavour": "One star fractures into eleven horizons."
+      }
+    ]
+  },
+  "whirring-wilderness": {
+    "label": "Whirring Wilderness",
+    "url": "https://parris-tech-services.github.io/WhirringWilderness/",
+    "portals": [
+      {
+        "to": "null",
+        "flavour": "The gears stop. The vines turn to rope. Silence."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "The machinery quiets. Beneath the roots, city lights flicker."
+      },
+      {
+        "to": "lantern-road",
+        "flavour": "A forest track straightens into a lantern-lit frontier road."
+      }
+    ]
+  },
+  "neathbound": {
+    "label": "NeathBound",
+    "url": "https://parris-tech-services.github.io/NeathBound/",
+    "portals": [
+      {
+        "to": "whirring-wilderness",
+        "flavour": "A cellar door opens on green light and turning gears."
+      },
+      {
+        "to": "midnight-line",
+        "flavour": "A station clock strikes thirteen. Rails appear in the dark."
+      },
+      {
+        "to": "simple-rpg",
+        "flavour": "The alley narrows into worked stone and torchlight."
+      }
+    ]
+  },
+  "lantern-road": {
+    "label": "Lantern Road",
+    "url": "https://parris-tech-services.github.io/lantern-road/",
+    "portals": [
+      {
+        "to": "whirring-wilderness",
+        "flavour": "The road enters a forest where the branches hum like machinery."
+      },
+      {
+        "to": "hollow-marches",
+        "flavour": "The lantern flame stretches into a horizon of old magic."
+      }
+    ]
+  },
+  "hollow-marches": {
+    "label": "The Hollow Marches",
+    "url": "https://astra-dnd-game.vercel.app/",
+    "portals": [
+      {
+        "to": "lantern-road",
+        "flavour": "A campaign road emerges from the mist, lanterns marking the way."
+      },
+      {
+        "to": "neathbound",
+        "flavour": "A ruin stair descends into a city beneath the world."
+      }
+    ]
+  },
+  "breach-command": {
+    "label": "Breach Command",
+    "url": "https://parris-tech-services.github.io/breach-command/",
+    "portals": [
+      {
+        "to": "wastes-courier",
+        "flavour": "The tactical grid dissolves into dust and a long road."
+      },
+      {
+        "to": "car-game",
+        "flavour": "The extraction vehicle is waiting. This time, you are driving."
+      }
+    ]
+  },
+  "car-game": {
+    "label": "Car Builder + Racing",
+    "url": "https://topsecretcheese-del.github.io/carGame/",
+    "portals": [
+      {
+        "to": "breach-command",
+        "flavour": "The chequered flag becomes a tactical boundary line."
+      },
+      {
+        "to": "eleven-realms",
+        "flavour": "The road leaves the circuit and enters a world with too many horizons."
+      }
+    ]
+  },
+  "eleven-realms": {
+    "label": "Eleven Realms",
+    "url": "https://realms-bay.vercel.app/",
+    "portals": [
+      {
+        "to": "starhaven",
+        "flavour": "One realm lifts into the stars."
+      },
+      {
+        "to": "car-game",
+        "flavour": "A gate becomes asphalt. An engine turns over on the other side."
+      }
+    ]
+  }
+}

@@ -649,6 +649,13 @@
     "platform": "Vercel"
   },
   {
+    "url": "https://skill-deploy-7tfaq44eli-codex-agent-deploys.vercel.app",
+    "names": [
+      "Forbidden Lands Lite"
+    ],
+    "platform": "Vercel"
+  },
+  {
     "url": "https://health-lens-rust.vercel.app/",
     "names": [
       "HealthLens",
@@ -788,6 +795,13 @@
       "lifehubdashboard",
       "Parris-Tech-Services/lifehubdashboard",
       "LifeHub"
+    ],
+    "platform": "Vercel"
+  },
+  {
+    "url": "https://skill-deploy-dwxq7kw5pa.vercel.app/",
+    "names": [
+      "Neverwinter RPG"
     ],
     "platform": "Vercel"
   },

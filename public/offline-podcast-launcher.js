@@ -1,6 +1,12 @@
 (() => {
   const script = document.currentScript;
   if (!script) return;
+  const appId = script.dataset.appId || document.documentElement.dataset.parrisApp || '';
+  if (appId) {
+    try {
+      if (localStorage.getItem('parris-ui:' + appId + ':podcasts') === 'false') return;
+    } catch {}
+  }
   const bank = script.dataset.bank || (script.dataset.topics || '').split(',')[0] || 'dnd';
   const buttonLabel = script.dataset.launcherLabel || '🎧 Podcasts';
   const differentLabel = script.dataset.label || '🎧 Listen to a different podcast';

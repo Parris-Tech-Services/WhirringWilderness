@@ -50,20 +50,51 @@ const PortalAdapter=(()=>{
     launcher.id="parris-portal-launcher";
     launcher.type="button";
     launcher.textContent="⬡ Portals";
-    Object.assign(launcher.style,{position:"fixed",left:"12px",bottom:"12px",zIndex:"2147483646",padding:"9px 12px",borderRadius:"999px",border:"1px solid rgba(167,139,250,.45)",background:"rgba(24,12,48,.94)",color:"#ede9fe",font:"600 12px system-ui",cursor:"pointer",boxShadow:"0 8px 30px #0006"});
+    Object.assign(launcher.style,{position:"fixed",left:"12px",bottom:"12px",zIndex:"2147483646",padding:"9px 12px",borderRadius:"999px",border:"1px solid rgba(167,139,250,.45)",background:"rgba(24,12,48,.94)",color:"#ede9fe",font:"600 12px system-ui",cursor:"pointer",boxShadow:"0 8px 30px #0006",transition:"bottom .18s ease"});
 
     const panel=document.createElement("div");
     panel.id="parris-portal-panel";
     panel.hidden=true;
-    Object.assign(panel.style,{position:"fixed",left:"12px",bottom:"58px",zIndex:"2147483646",width:"min(320px,calc(100vw - 24px))",maxHeight:"60vh",overflow:"auto",padding:"14px",borderRadius:"16px",border:"1px solid rgba(167,139,250,.35)",background:"rgba(10,5,25,.97)",color:"#ede9fe",boxShadow:"0 18px 50px #0009",font:"13px system-ui"});
+    Object.assign(panel.style,{position:"fixed",left:"12px",bottom:"58px",zIndex:"2147483646",width:"min(320px,calc(100vw - 24px))",maxHeight:"60vh",overflow:"auto",padding:"14px",borderRadius:"16px",border:"1px solid rgba(167,139,250,.35)",background:"rgba(10,5,25,.97)",color:"#ede9fe",boxShadow:"0 18px 50px #0009",font:"13px system-ui",transition:"bottom .18s ease"});
     const title=document.createElement("div");title.textContent="Cross from "+world.label;Object.assign(title.style,{fontWeight:"800",marginBottom:"8px"});
     panel.appendChild(title);
     world.portals.forEach(route=>renderLink(route.to,panel,registry[route.to]?.label||route.to));
     const network=document.createElement("a");network.href="https://parris-tech-services.github.io/WhirringWilderness/network/";network.textContent="View all games & apps →";Object.assign(network.style,{display:"block",marginTop:"10px",color:"#67e8f9",textDecoration:"none",fontWeight:"700"});
     panel.appendChild(network);
 
+    function syncDockPosition(){
+      const podcastLauncher=document.getElementById("offline-podcast-launcher");
+      const podcastPanel=document.getElementById("offline-podcast-panel");
+
+      if(podcastPanel && !podcastPanel.hidden){
+        panel.hidden=true;
+        launcher.hidden=true;
+        return;
+      }
+
+      launcher.hidden=false;
+      if(podcastLauncher){
+        const rect=podcastLauncher.getBoundingClientRect();
+        const podcastVisible=!podcastLauncher.hidden && rect.height>0;
+        if(podcastVisible){
+          const stackedBottom=Math.max(12,window.innerHeight-rect.top+10);
+          launcher.style.bottom=stackedBottom+"px";
+          panel.style.bottom=(stackedBottom+46)+"px";
+          return;
+        }
+      }
+
+      launcher.style.bottom="12px";
+      panel.style.bottom="58px";
+    }
+
     launcher.addEventListener("click",()=>{panel.hidden=!panel.hidden});
     document.body.append(panel,launcher);
+    syncDockPosition();
+
+    const dockObserver=new MutationObserver(syncDockPosition);
+    dockObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["hidden","style","class"]});
+    window.addEventListener("resize",syncDockPosition,{passive:true});
   }
 
   function init(id){

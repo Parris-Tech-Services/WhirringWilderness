@@ -22,32 +22,32 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 ### 1.1 Visual & UI Enhancements
 
 #### Typography & Readability
-- [ ] **Custom Font System**
+- [ ] **UN-20261024-004-0025** **Custom Font System**
   - Add a serif font for narrative text (e.g., Crimson Pro, EB Garamond)
   - Use monospace for stats/logs (already good)
   - Implement font loading with fallbacks
   - Add font size controls in settings
 
-- [ ] **Text Animation & Presentation**
+- [ ] **UN-20261024-004-0031** **Text Animation & Presentation**
   - Typewriter effect for log entries (toggleable)
   - Smooth fade-ins for new log entries
   - Highlight important text (quest updates, XP gains)
   - Color-coded log entry types (narration, combat, system, quest)
 
-- [ ] **Improved Layout**
+- [ ] **UN-20261024-004-0037** **Improved Layout**
   - Better spacing and visual hierarchy
   - Subtle animations for panel transitions
   - Improved mobile responsiveness
   - Dark/light theme toggle (or multiple color schemes)
 
 #### Visual Effects
-- [ ] **Ambient Visuals**
+- [ ] **UN-20261024-004-0044** **Ambient Visuals**
   - Subtle animated backgrounds per biome (CSS animations or canvas)
   - Particle effects for magical moments (ritual, level up)
   - Screen shake on damage
   - Color overlays for different biomes
 
-- [ ] **Icons & Illustrations**
+- [ ] **UN-20261024-004-0050** **Icons & Illustrations**
   - Simple icon system for items, creatures, locations
   - Character portraits for NPCs (optional but impactful)
   - Location illustrations or mood images
@@ -55,39 +55,39 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 1.2 Audio Enhancements
 
-- [ ] **Music System**
+- [ ] **UN-20261024-004-0058** **Music System**
   - Replace procedural audio with actual music tracks
   - Dynamic music that responds to game state (combat, peace, danger)
   - Multiple tracks per biome
   - Smooth transitions between tracks
 
-- [ ] **Sound Design**
+- [ ] **UN-20261024-004-0064** **Sound Design**
   - More varied SFX (different attack sounds, creature-specific sounds)
   - Environmental audio (wind, water, footsteps)
   - Voice acting for key NPCs (optional but huge impact)
   - Audio sliders (master, music, SFX, ambient)
 
-- [ ] **Audio Polish**
+- [ ] **UN-20261024-004-0070** **Audio Polish**
   - Better mixing and mastering
   - Spatial audio hints (left/right panning)
   - Audio cues for important events
 
 ### 1.3 Accessibility & Settings
 
-- [ ] **Comprehensive Settings Menu**
+- [ ] **UN-20261024-004-0077** **Comprehensive Settings Menu**
   - Audio controls (master, music, SFX, ambient volumes)
   - Text size slider
   - Animation speed/toggle
   - Colorblind-friendly color schemes
   - High contrast mode
 
-- [ ] **Accessibility Features**
+- [ ] **UN-20261024-004-0084** **Accessibility Features**
   - Keyboard navigation (full game playable with keyboard)
   - Screen reader support (ARIA labels)
   - Subtitles/captions for audio
   - Reduced motion option
 
-- [ ] **Quality of Life**
+- [ ] **UN-20261024-004-0090** **Quality of Life**
   - Auto-save indicator
   - Save slot system (multiple saves)
   - Export/import save data
@@ -105,37 +105,37 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 - Damage calculation is basic
 
 #### Improvements
-- [ ] **Combat Actions**
+- [ ] **UN-20261024-004-0108** **Combat Actions**
   - **Defend** - Reduce incoming damage, gain small HP regen
   - **Observe** - Learn creature weaknesses, reduce encounter chance next time
   - **Bargain** - Attempt to avoid combat (based on reputation/charisma)
   - **Use Item** - Consumables in combat (healing, buffs, debuffs)
 
-- [ ] **Combat Depth**
+- [ ] **UN-20261024-004-0114** **Combat Depth**
   - Status effects (poison, bleed, stun, buffs)
   - Critical hits and misses
   - Different attack types (light/heavy, ranged if applicable)
   - Creature-specific mechanics (some creatures have special abilities)
 
-- [ ] **Combat Balance**
+- [ ] **UN-20261024-004-0120** **Combat Balance**
   - More varied creature stats and behaviors
   - Scaling difficulty based on level/area
   - Better risk/reward (harder creatures = better rewards)
 
 ### 2.2 Character Progression
 
-- [ ] **Skill System**
+- [ ] **UN-20261024-004-0127** **Skill System**
   - Skills: Combat, Survival, Perception, Diplomacy, Crafting
   - Skill points on level up
   - Skills affect gameplay (higher Perception = better gather yields, lower encounter chance)
   - Skill checks in dialogue and actions
 
-- [ ] **Character Builds**
+- [ ] **UN-20261024-004-0133** **Character Builds**
   - Different starting stats/backgrounds
   - Build variety (combat-focused, diplomatic, gatherer)
   - Meaningful choices that affect playstyle
 
-- [ ] **Equipment System**
+- [ ] **UN-20261024-004-0138** **Equipment System**
   - Weapons (affect damage, attack speed)
   - Armor (affect defense, movement)
   - Accessories (utility bonuses)
@@ -143,19 +143,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 2.3 Crafting & Economy
 
-- [ ] **Crafting System**
+- [ ] **UN-20261024-004-0146** **Crafting System**
   - Combine items to create new items
   - Recipes to discover
   - Crafting stations at certain locations
   - Upgraded versions of items
 
-- [ ] **Economy Depth**
+- [ ] **UN-20261024-004-0152** **Economy Depth**
   - More trade options
   - Dynamic pricing (supply/demand)
   - Reputation affects prices
   - Currency system (optional, or keep barter-only)
 
-- [ ] **Resource Management**
+- [ ] **UN-20261024-004-0158** **Resource Management**
   - Item weight/encumbrance (optional)
   - Storage at base locations
   - Item degradation (optional)
@@ -163,19 +163,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 2.4 Exploration & Discovery
 
-- [ ] **Hidden Content**
+- [ ] **UN-20261024-004-0166** **Hidden Content**
   - Secret locations
   - Hidden items and recipes
   - Environmental storytelling
   - Lore fragments to collect
 
-- [ ] **Dynamic Events**
+- [ ] **UN-20261024-004-0172** **Dynamic Events**
   - Random events while traveling
   - Time-based events (day/night cycle?)
   - Weather system (affects gameplay)
   - Seasonal changes (if applicable)
 
-- [ ] **Map System**
+- [ ] **UN-20261024-004-0178** **Map System**
   - Visual map (even if simple)
   - Location discovery
   - Fast travel (unlockable)
@@ -188,32 +188,32 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 ### 3.1 Narrative Expansion
 
 #### Quest System Overhaul
-- [ ] **Quest Types**
+- [ ] **UN-20261024-004-0191** **Quest Types**
   - Main quest (heal the grove - expand this)
   - Side quests (10-15 meaningful side quests)
   - Repeatable quests (daily/weekly)
   - Hidden quests (discoverable)
 
-- [ ] **Branching Narratives**
+- [ ] **UN-20261024-004-0197** **Branching Narratives**
   - Multiple solutions to quests
   - Choices that matter (affect story, reputation, endings)
   - Multiple endings (3-5 different endings)
   - Consequences that persist
 
-- [ ] **Dialogue System**
+- [ ] **UN-20261024-004-0203** **Dialogue System**
   - Dialogue trees (not just single responses)
   - Skill checks in dialogue
   - Relationship system with NPCs
   - NPC schedules/routines
 
 #### World Building
-- [ ] **Lore System**
+- [ ] **UN-20261024-004-0210** **Lore System**
   - Codex/encyclopedia
   - Collectible lore entries
   - Environmental storytelling
   - Rich backstory for locations and NPCs
 
-- [ ] **NPC Depth**
+- [ ] **UN-20261024-004-0216** **NPC Depth**
   - More NPCs (10-15 total)
   - NPC backstories and motivations
   - NPC relationships with each other
@@ -221,19 +221,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 3.2 Content Volume
 
-- [ ] **Locations**
+- [ ] **UN-20261024-004-0224** **Locations**
   - Expand from 7 to 15-20 locations
   - More biome variety
   - Unique mechanics per location
   - Location-specific quests
 
-- [ ] **Creatures**
+- [ ] **UN-20261024-004-0230** **Creatures**
   - Expand from 4 to 15-20 creatures
   - Boss creatures (unique encounters)
   - Creature families/ecosystems
   - Creature behavior variety
 
-- [ ] **Items**
+- [ ] **UN-20261024-004-0236** **Items**
   - Expand from 4 to 30-40 items
   - Item tiers (common, rare, legendary)
   - Unique items with special properties
@@ -241,13 +241,13 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 3.3 Replayability
 
-- [ ] **Multiple Playthroughs**
+- [ ] **UN-20261024-004-0244** **Multiple Playthroughs**
   - New Game+ mode
   - Different starting conditions
   - Randomized elements (creature spawns, item locations)
   - Achievement system
 
-- [ ] **Endgame Content**
+- [ ] **UN-20261024-004-0250** **Endgame Content**
   - Post-game quests
   - High-level areas
   - Optional super-bosses
@@ -259,19 +259,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 4.1 Advanced Systems
 
-- [ ] **Reputation System Expansion**
+- [ ] **UN-20261024-004-0262** **Reputation System Expansion**
   - Multiple factions (Forest, Sanctum, Traders, etc.)
   - Reputation affects dialogue, prices, quest availability
   - Reputation-based endings
   - Dynamic reputation changes
 
-- [ ] **Time System**
+- [ ] **UN-20261024-004-0268** **Time System**
   - Day/night cycle (affects encounters, NPC availability)
   - Calendar system (events on specific days)
   - Time pressure for certain quests (optional)
   - Weather system
 
-- [ ] **Survival Elements** (Optional)
+- [ ] **UN-20261024-004-0274** **Survival Elements** (Optional)
   - Hunger/thirst (if it fits the theme)
   - Fatigue/rest system
   - Environmental hazards
@@ -279,19 +279,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 4.2 Technical Improvements
 
-- [ ] **Performance**
+- [ ] **UN-20261024-004-0282** **Performance**
   - Optimize rendering (virtual scrolling for long logs)
   - Lazy loading for content
   - Save file optimization
   - Memory management
 
-- [ ] **Modding Support** (Optional but huge for indie)
+- [ ] **UN-20261024-004-0288** **Modding Support** (Optional but huge for indie)
   - Content modding API
   - Save file format documentation
   - Mod loader/manager
   - Steam Workshop support (if on Steam)
 
-- [ ] **Analytics & Telemetry**
+- [ ] **UN-20261024-004-0294** **Analytics & Telemetry**
   - Player behavior tracking (anonymized)
   - Balance data collection
   - Crash reporting
@@ -299,13 +299,13 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 4.3 Polish & Bug Fixing
 
-- [ ] **QA Process**
+- [ ] **UN-20261024-004-0302** **QA Process**
   - Comprehensive testing
   - Bug tracking system
   - Playtesting with external testers
   - Balance testing
 
-- [ ] **Localization**
+- [ ] **UN-20261024-004-0308** **Localization**
   - Multi-language support
   - Text externalization
   - Cultural sensitivity review
@@ -317,14 +317,14 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 5.1 Marketing Assets
 
-- [ ] **Visual Assets**
+- [ ] **UN-20261024-004-0320** **Visual Assets**
   - Logo and branding
   - Screenshots (10-15 high-quality)
   - Trailer (1-2 minutes)
   - GIFs for social media
   - Press kit
 
-- [ ] **Store Presence**
+- [ ] **UN-20261024-004-0327** **Store Presence**
   - Steam page (if applicable)
   - Itch.io page
   - Game description
@@ -333,19 +333,19 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 5.2 Launch Features
 
-- [ ] **Tutorial System**
+- [ ] **UN-20261024-004-0336** **Tutorial System**
   - Interactive tutorial
   - Help system
   - Tooltips
   - Contextual hints
 
-- [ ] **Achievements**
+- [ ] **UN-20261024-004-0342** **Achievements**
   - 20-30 achievements
   - Steam achievements (if applicable)
   - Achievement descriptions
   - Hidden achievements
 
-- [ ] **Credits & About**
+- [ ] **UN-20261024-004-0348** **Credits & About**
   - Credits screen
   - About page
   - Special thanks
@@ -353,13 +353,13 @@ This document outlines a comprehensive plan to elevate Whispering Wilds from a s
 
 ### 5.3 Post-Launch Support
 
-- [ ] **Update Plan**
+- [ ] **UN-20261024-004-0356** **Update Plan**
   - Bug fix patches
   - Content updates
   - Balance patches
   - Community feedback integration
 
-- [ ] **Community**
+- [ ] **UN-20261024-004-0362** **Community**
   - Discord server
   - Social media presence
   - Community guidelines
@@ -400,24 +400,24 @@ If you can only implement a subset, focus on these high-impact items:
 - ✅ Modular design
 
 ### Areas for Improvement
-- [ ] **Testing**
+- [ ] **UN-20261024-004-0403** **Testing**
   - Unit tests for game logic
   - Integration tests for game flow
   - E2E tests for critical paths
 
-- [ ] **Documentation**
+- [ ] **UN-20261024-004-0408** **Documentation**
   - Code comments for complex logic
   - Architecture documentation
   - Content creation guide
   - API documentation
 
-- [ ] **Performance**
+- [ ] **UN-20261024-004-0414** **Performance**
   - Profile and optimize hot paths
   - Implement virtual scrolling for logs
   - Optimize state updates
   - Reduce bundle size
 
-- [ ] **Error Handling**
+- [ ] **UN-20261024-004-0420** **Error Handling**
   - Better error messages
   - Error boundaries in React
   - Save file validation

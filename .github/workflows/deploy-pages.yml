@@ -7,6 +7,8 @@ on:
   pull_request:
     paths:
       - 'public/network/settings.html'
+      - 'public/network/portal.html'
+      - 'tests/network-portal-destinations.test.mjs'
       - 'tests/network-settings-return.test.mjs'
       - '.github/workflows/deploy-pages.yml'
 
@@ -33,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Regression-test network settings return navigation
-        run: node --test tests/network-settings-return.test.mjs
+        run: node --test tests/network-*.test.mjs
       - name: Build
         run: npm run build
       - name: Upload Pages artifact

@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'public/network/settings.html'
+      - 'tests/network-settings-return.test.mjs'
+      - '.github/workflows/deploy-pages.yml'
 
 permissions:
   contents: read
@@ -27,14 +32,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Regression-test network settings return navigation
+        run: node --test tests/network-settings-return.test.mjs
       - name: Build
         run: npm run build
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

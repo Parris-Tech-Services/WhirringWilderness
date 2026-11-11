@@ -44,7 +44,32 @@ main{max-width:680px;margin:auto;padding:28px 16px 70px}.back{display:inline-blo
 <script>
 const params=new URLSearchParams(location.search);
 const app=params.get("app")||"This app";
-const returnUrl=params.get("return")||"./";
+// Return only to approved app hosts. Untrusted query strings cannot choose
+// script schemes, unrelated sites, credential-bearing URLs or insecure transport.
+// A local HTTP URL is permitted only on the exact current local development origin.
+const RETURN_HOSTS=new Set([
+  "parris-tech-services.github.io",
+  "joshuaparrisdadlan-stack.github.io",
+  "joshualparris.github.io",
+  "topsecretcheese-del.github.io",
+  "josh-hub-two.vercel.app",
+  "wastes-courier-roguelike.vercel.app",
+  "astra-dnd-game.vercel.app",
+  "realms-bay.vercel.app",
+  "buckland-blocks.vercel.app"
+]);
+function safeReturnUrl(value){
+  const fallback=new URL("./",location.href);
+  try{
+    const target=new URL(value||"./",location.href);
+    if(target.username||target.password)return fallback;
+    if(target.protocol==="https:"&&RETURN_HOSTS.has(target.hostname))return target;
+    const local=target.hostname==="localhost"||target.hostname==="127.0.0.1";
+    if(local&&target.protocol==="http:"&&target.origin===location.origin)return target;
+  }catch{}
+  return fallback;
+}
+const returnTarget=safeReturnUrl(params.get("return"));
 const rawPrefs=params.get("prefs");
 let prefs={podcasts:false,portals:false,network:false};
 try{prefs={...prefs,...JSON.parse(rawPrefs||"{}")}}catch{}
@@ -52,7 +77,7 @@ const capabilities=new Set((params.get("capabilities")||"network").split(",").fi
 
 document.title="Settings — "+app;
 document.getElementById("title").textContent="Settings — "+app;
-document.getElementById("backLink").href=returnUrl;
+document.getElementById("backLink").href=returnTarget.href;
 
 for(const key of ["podcasts","portals","network"]){
   const row=document.getElementById(key+"Row");
@@ -69,7 +94,7 @@ function current(){
   };
 }
 function goBack(next){
-  const target=new URL(returnUrl,location.href);
+  const target=new URL(returnTarget.href);
   target.searchParams.set("parrisPrefs",JSON.stringify(next));
   location.href=target.toString();
 }

@@ -4,6 +4,29 @@ html,body{height:100%;margin:0;background:#03020a;color:#ede9fe;font-family:Geor
 (async()=>{const p=new URLSearchParams(location.search),from=p.get("from")||"",to=p.get("to")||"";let r={};try{r=await fetch("./portal-registry.json",{cache:"no-store"}).then(x=>x.json())}catch(e){console.error(e)}
 let flavour="The air shimmers. You pass between worlds.";const route=r[from]?.portals?.find(x=>x.to===to);if(route?.flavour)flavour=route.flavour;
 document.getElementById("flavour").textContent=flavour;document.getElementById("dest").textContent=r[to]?.label||to.replace(/-/g," ")||"Unknown destination";
-const target=r[to]?.url||p.get("url");let done=false;function cross(){if(done||!target)return;done=true;const u=new URL(target,location.href);u.searchParams.set("portal","true");if(from)u.searchParams.set("from",from);location.href=u.toString()}
+// The destination must come from the same-origin registry, never a query parameter.
+const target=r[to]?.url||null;
+const APPROVED_HOSTS=new Set([
+  "parris-tech-services.github.io",
+  "joshuaparrisdadlan-stack.github.io",
+  "joshualparris.github.io",
+  "topsecretcheese-del.github.io",
+  "josh-hub-two.vercel.app",
+  "wastes-courier-roguelike.vercel.app",
+  "astra-dnd-game.vercel.app",
+  "realms-bay.vercel.app",
+  "buckland-blocks.vercel.app"
+]);
+let done=false;
+function cross(){
+  if(done||!target)return;
+  let destination;
+  try{destination=new URL(target,location.href)}catch{return}
+  if(destination.protocol!=="https:"||destination.username||destination.password||!APPROVED_HOSTS.has(destination.hostname))return;
+  done=true;
+  destination.searchParams.set("portal","true");
+  if(from)destination.searchParams.set("from",from);
+  location.href=destination.toString();
+}
 document.getElementById("skip").onclick=cross;const fill=document.getElementById("fill"),start=Date.now(),delay=3200;function tick(){const n=Math.min(100,(Date.now()-start)/delay*100);fill.style.width=n+"%";n<100?requestAnimationFrame(tick):cross()}requestAnimationFrame(tick)})();
 </script></body></html>

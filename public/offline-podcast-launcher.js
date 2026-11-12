@@ -22,6 +22,8 @@
   } catch {
     return;
   }
+  // Runtime marker: hosted acceptance must not confuse a stale Pages release with this fix.
+  window.__whirringOfflineCapabilitiesV2 = true;
   const bank = script.dataset.bank || (script.dataset.topics || '').split(',')[0] || 'dnd';
   const buttonLabel = script.dataset.launcherLabel || '🎧 Podcasts';
   const differentLabel = script.dataset.label || '🎧 Listen to a different podcast';

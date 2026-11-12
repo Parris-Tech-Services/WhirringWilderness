@@ -40,9 +40,58 @@
   const launcher=document.createElement('button');launcher.id='offline-podcast-launcher';launcher.type='button';launcher.textContent=buttonLabel;launcher.setAttribute('aria-label','Open podcasts');launcher.setAttribute('aria-expanded','false');document.body.appendChild(launcher);
   const panel=document.createElement('aside');panel.id='offline-podcast-panel';panel.hidden=true;panel.setAttribute('aria-label','Independent podcast player');panel.innerHTML=`<div class="offline-podcast-head"><div><div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#aaa">Independent offline podcasts</div><h2 class="offline-podcast-title"></h2><p class="offline-podcast-meta"></p></div><button class="offline-podcast-close" type="button" aria-label="Close podcast player">×</button></div><div class="offline-podcast-media"></div><div class="offline-podcast-actions"><button class="offline-podcast-different" type="button"></button><span class="offline-podcast-offline-slot"></span><a class="offline-podcast-link" target="_blank" rel="noopener noreferrer">Open in Spotify ↗</a></div><p class="offline-podcast-note"></p>`;document.body.appendChild(panel);
   const title=panel.querySelector('.offline-podcast-title'),meta=panel.querySelector('.offline-podcast-meta'),media=panel.querySelector('.offline-podcast-media'),offlineSlot=panel.querySelector('.offline-podcast-offline-slot'),note=panel.querySelector('.offline-podcast-note'),link=panel.querySelector('.offline-podcast-link'),close=panel.querySelector('.offline-podcast-close'),different=panel.querySelector('.offline-podcast-different');different.textContent=differentLabel;
-  async function refreshOffline(){const e=episodes[currentIndex];if(!e?.audio||!('caches'in window)){offlineState='streaming';if(isOpen)renderControls();return}try{const c=await caches.open(AUDIO_CACHE);offlineState=await c.match(e.audio,{ignoreVary:true})?'saved':'downloadable'}catch{offlineState='downloadable'}if(isOpen)renderControls()}
-  function renderControls(){const e=episodes[currentIndex];if(!e?.audio){offlineSlot.innerHTML='';return}offlineSlot.innerHTML=`<button class="offline-podcast-offline" type="button" ${offlineState==='downloading'?'disabled':''}>${offlineState==='saved'?'✓ Offline saved · tap to remove':offlineState==='downloading'?'Downloading…':offlineState==='failed'?'Retry offline download':'⬇ Download offline'}</button>`;offlineSlot.querySelector('button').addEventListener('click',toggleOffline)}
-  async function toggleOffline(){const e=episodes[currentIndex];if(!e?.audio||!('caches'in window))return;offlineState='downloading';renderControls();try{const c=await caches.open(AUDIO_CACHE),existing=await c.match(e.audio,{ignoreVary:true});if(existing){await c.delete(e.audio,{ignoreVary:true});offlineState='downloadable';renderControls();return}let response;try{response=await fetch(e.audio,{cache:'no-store'})}catch{response=await fetch(e.audio,{mode:'no-cors',cache:'no-store'})}if(!response||(response.type!=='opaque'&&!response.ok))throw new Error('Download failed');await c.put(e.audio,response.clone());offlineState='saved'}catch(err){console.error(err);offlineState='failed'}renderControls()}
+  // Only cache publisher responses that the browser can actually read.
+  // An opaque no-CORS response may appear "saved", but fails after an offline restart.
+  async function refreshOffline(){
+    const e=episodes[currentIndex];
+    if(!e?.audio||!('caches'in window)){offlineState='streaming';if(isOpen)renderControls();return}
+    const selectedIndex=currentIndex;
+    try{
+      const c=await caches.open(AUDIO_CACHE),existing=await c.match(e.audio,{ignoreVary:true});
+      if(existing?.type==='opaque')await c.delete(e.audio,{ignoreVary:true});
+      if(existing&&existing.type!=='opaque'){offlineState='saved';if(isOpen)renderControls();return}
+      const probe=await fetch(e.audio,{mode:'cors',cache:'no-store',headers:{Range:'bytes=0-0'}});
+      const canDownload=probe.ok&&probe.type!=='opaque';
+      await probe.body?.cancel();
+      if(currentIndex===selectedIndex){offlineState=canDownload?'downloadable':'unsupported';if(isOpen)renderControls()}
+    }catch{
+      if(currentIndex===selectedIndex){offlineState=navigator.onLine?'unsupported':'unavailable';if(isOpen)renderControls()}
+    }
+  }
+  function renderControls(){
+    const e=episodes[currentIndex];
+    if(!e?.audio){offlineSlot.innerHTML='';return}
+    const unavailable=offlineState==='unsupported'||offlineState==='unavailable';
+    const label=offlineState==='saved'?'✓ Offline saved · tap to remove':
+      offlineState==='downloading'?'Downloading…':
+      offlineState==='checking'?'Checking publisher support…':
+      offlineState==='unsupported'?'Streaming only · publisher restrictions':
+      offlineState==='unavailable'?'Connect to check offline support':
+      offlineState==='failed'?'Retry offline download':'⬇ Download offline';
+    offlineSlot.innerHTML='<button class="offline-podcast-offline" type="button" '+(offlineState==='downloading'||unavailable?'disabled':'')+'></button>';
+    offlineSlot.querySelector('button').textContent=label;
+    offlineSlot.querySelector('button').addEventListener('click',toggleOffline);
+    if(unavailable)note.textContent=offlineState==='unsupported'?
+      'The publisher does not permit a readable offline download from this browser. You can still stream the original audio online.':
+      'Connect to the internet to check or download this publisher episode.';
+  }
+  async function toggleOffline(){
+    const e=episodes[currentIndex];
+    if(!e?.audio||!('caches'in window)||offlineState==='unsupported')return;
+    offlineState='downloading';renderControls();
+    try{
+      const c=await caches.open(AUDIO_CACHE),existing=await c.match(e.audio,{ignoreVary:true});
+      if(existing?.type==='opaque')await c.delete(e.audio,{ignoreVary:true});
+      else if(existing){await c.delete(e.audio,{ignoreVary:true});offlineState='downloadable';renderControls();return}
+      const response=await fetch(e.audio,{mode:'cors',cache:'no-store'});
+      if(!response.ok||response.type==='opaque')throw new Error('Publisher does not allow readable audio download');
+      await c.put(e.audio,response.clone());
+      const stored=await c.match(e.audio,{ignoreVary:true});
+      if(!stored||stored.type==='opaque')throw new Error('The downloaded audio could not be verified');
+      offlineState='saved';
+    }catch(err){console.error(err);offlineState='failed';note.textContent='Offline download failed. Streaming remains available; retry while connected.'}
+    renderControls();
+  }
   function render(){const e=episodes[currentIndex];if(!e)return;title.textContent=e.title;meta.textContent=[e.show,...(e.tags||[])].filter(Boolean).join(' · ');if(e.audio){media.innerHTML='<audio class="offline-podcast-audio" controls preload="metadata"></audio>';media.querySelector('audio').src=e.audio;note.textContent='Verified publisher audio can be saved locally for offline listening.'}else{media.innerHTML='<iframe class="offline-podcast-frame" title="Spotify podcast episode" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';media.querySelector('iframe').src='https://open.spotify.com/embed/episode/'+encodeURIComponent(e.id)+'?theme=0';note.textContent='Streaming only: no verified direct publisher audio source is stored yet.'}link.href='https://open.spotify.com/episode/'+encodeURIComponent(e.id);renderControls();refreshOffline()}
   function chooseDifferent(){const excluded=new Set([currentIndex,...recent]);let candidates=episodes.map((_,i)=>i).filter(i=>!excluded.has(i));if(!candidates.length)candidates=episodes.map((_,i)=>i).filter(i=>i!==currentIndex);if(!candidates.length)candidates=[0];const previous=currentIndex;currentIndex=candidates[Math.floor(Math.random()*candidates.length)];if(previous!==currentIndex)recent=[previous,...recent.filter(i=>i!==previous)].slice(0,RECENT_LIMIT);save();offlineState='streaming';render()}
   launcher.addEventListener('click',()=>{isOpen=true;panel.hidden=false;launcher.hidden=true;launcher.setAttribute('aria-expanded','true');render()});close.addEventListener('click',()=>{isOpen=false;panel.hidden=true;launcher.hidden=false;launcher.setAttribute('aria-expanded','false')});different.addEventListener('click',chooseDifferent);

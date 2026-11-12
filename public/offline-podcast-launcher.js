@@ -36,7 +36,8 @@
   const style=document.createElement('style');
   style.textContent=`#offline-podcast-launcher{position:fixed;left:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:2147483000;border:1px solid #555;border-radius:999px;background:#181818;color:#fff;padding:11px 16px;font:700 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 12px 34px rgba(0,0,0,.38);cursor:pointer}#offline-podcast-panel{position:fixed;left:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:2147483001;width:min(560px,calc(100vw - 20px));box-sizing:border-box;border:1px solid #555;border-radius:16px;background:#171717;color:#fff;padding:13px;box-shadow:0 20px 55px rgba(0,0,0,.58);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}#offline-podcast-panel[hidden]{display:none!important}.offline-podcast-head{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.offline-podcast-title{margin:4px 0 0;font-size:16px;line-height:1.3}.offline-podcast-meta{margin:5px 0 0;color:#bbb;font-size:12px;line-height:1.4}.offline-podcast-close{width:38px;height:38px;flex:0 0 38px;border:1px solid #555;border-radius:50%;background:#282828;color:#fff;font-size:22px;cursor:pointer}.offline-podcast-frame{display:block;width:100%;height:152px;border:0;border-radius:12px;background:#080808;margin-top:10px}.offline-podcast-audio{display:block;width:100%;margin-top:10px}.offline-podcast-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.offline-podcast-actions button,.offline-podcast-actions a{border-radius:10px;padding:9px 12px;font:700 13px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;text-decoration:none;cursor:pointer}.offline-podcast-different{border:0;background:#5b4bc4;color:#fff}.offline-podcast-offline{border:0;background:#315c42;color:#fff}.offline-podcast-offline:disabled{opacity:.65}.offline-podcast-link{display:inline-flex;align-items:center;border:1px solid #555;background:#282828;color:#fff}.offline-podcast-note{margin:9px 0 0;color:#aaa;font-size:11px}@media(max-width:640px){#offline-podcast-panel{left:5px;width:calc(100vw - 10px);padding:11px}.offline-podcast-actions>*{flex:1;text-align:center;justify-content:center}}`;
   document.head.appendChild(style);
-  let episodes=[],currentIndex=0,recent=[],offlineState='streaming',isOpen=false;
+  let episodes=[],currentIndex=0,recent=[],offlineState='streaming',isOpen=false,playbackObjectURL=null;
+  function releaseOfflineAudio(){if(playbackObjectURL){URL.revokeObjectURL(playbackObjectURL);playbackObjectURL=null}}
   try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');if(Number.isInteger(saved.currentIndex))currentIndex=saved.currentIndex;if(Array.isArray(saved.recent))recent=saved.recent.slice(0,RECENT_LIMIT)}catch{}
   const save=()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify({currentIndex,recent:recent.slice(0,RECENT_LIMIT)}))}catch{}};
   const launcher=document.createElement('button');launcher.id='offline-podcast-launcher';launcher.type='button';launcher.textContent=buttonLabel;launcher.setAttribute('aria-label','Open podcasts');launcher.setAttribute('aria-expanded','false');document.body.appendChild(launcher);
@@ -51,7 +52,23 @@
     try{
       const c=await caches.open(AUDIO_CACHE),existing=await c.match(e.audio,{ignoreVary:true});
       if(existing?.type==='opaque')await c.delete(e.audio,{ignoreVary:true});
-      if(existing&&existing.type!=='opaque'){offlineState='saved';if(isOpen)renderControls();return}
+      if(existing&&existing.type!=='opaque'){
+        offlineState='saved';
+        // Reopened-offline browsers may have a service worker but still fail
+        // to fetch cross-origin media. Play directly from our verified local
+        // CacheStorage response via a blob URL without a network request.
+        if(isOpen&&currentIndex===selectedIndex&&!navigator.onLine){
+          const blob=await existing.blob();
+          const audio=media.querySelector('audio');
+          if(blob.size>0&&audio&&currentIndex===selectedIndex){
+            releaseOfflineAudio();
+            playbackObjectURL=URL.createObjectURL(blob);
+            audio.src=playbackObjectURL;
+          }
+        }
+        if(isOpen&&currentIndex===selectedIndex)renderControls();
+        return
+      }
       const probe=await fetch(e.audio,{mode:'cors',cache:'no-store',headers:{Range:'bytes=0-0'}});
       const canDownload=probe.ok&&probe.type!=='opaque';
       await probe.body?.cancel();
@@ -94,9 +111,9 @@
     }catch(err){console.error(err);offlineState='failed';note.textContent='Offline download failed. Streaming remains available; retry while connected.'}
     renderControls();
   }
-  function render(){const e=episodes[currentIndex];if(!e)return;offlineState='checking';title.textContent=e.title;meta.textContent=[e.show,...(e.tags||[])].filter(Boolean).join(' · ');if(e.audio){media.innerHTML='<audio class="offline-podcast-audio" controls preload="metadata"></audio>';media.querySelector('audio').src=e.audio;note.textContent='Verified publisher audio can be saved locally for offline listening.'}else{media.innerHTML='<iframe class="offline-podcast-frame" title="Spotify podcast episode" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';media.querySelector('iframe').src='https://open.spotify.com/embed/episode/'+encodeURIComponent(e.id)+'?theme=0';note.textContent='Streaming only: no verified direct publisher audio source is stored yet.'}link.href='https://open.spotify.com/episode/'+encodeURIComponent(e.id);renderControls();refreshOffline()}
+  function render(){releaseOfflineAudio();const e=episodes[currentIndex];if(!e)return;offlineState='checking';title.textContent=e.title;meta.textContent=[e.show,...(e.tags||[])].filter(Boolean).join(' · ');if(e.audio){media.innerHTML='<audio class="offline-podcast-audio" controls preload="metadata"></audio>';media.querySelector('audio').src=e.audio;note.textContent='Verified publisher audio can be saved locally for offline listening.'}else{media.innerHTML='<iframe class="offline-podcast-frame" title="Spotify podcast episode" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';media.querySelector('iframe').src='https://open.spotify.com/embed/episode/'+encodeURIComponent(e.id)+'?theme=0';note.textContent='Streaming only: no verified direct publisher audio source is stored yet.'}link.href='https://open.spotify.com/episode/'+encodeURIComponent(e.id);renderControls();refreshOffline()}
   function chooseDifferent(){const excluded=new Set([currentIndex,...recent]);let candidates=episodes.map((_,i)=>i).filter(i=>!excluded.has(i));if(!candidates.length)candidates=episodes.map((_,i)=>i).filter(i=>i!==currentIndex);if(!candidates.length)candidates=[0];const previous=currentIndex;currentIndex=candidates[Math.floor(Math.random()*candidates.length)];if(previous!==currentIndex)recent=[previous,...recent.filter(i=>i!==previous)].slice(0,RECENT_LIMIT);save();offlineState='streaming';render()}
-  launcher.addEventListener('click',()=>{isOpen=true;panel.hidden=false;launcher.hidden=true;launcher.setAttribute('aria-expanded','true');render()});close.addEventListener('click',()=>{isOpen=false;panel.hidden=true;launcher.hidden=false;launcher.setAttribute('aria-expanded','false')});different.addEventListener('click',chooseDifferent);
+  launcher.addEventListener('click',()=>{isOpen=true;panel.hidden=false;launcher.hidden=true;launcher.setAttribute('aria-expanded','true');render()});close.addEventListener('click',()=>{releaseOfflineAudio();isOpen=false;panel.hidden=true;launcher.hidden=false;launcher.setAttribute('aria-expanded','false')});different.addEventListener('click',chooseDifferent);
   fetch(dataUrl).then(r=>{if(!r.ok)throw new Error('Podcast bank '+r.status);return r.json()}).then(data=>{episodes=Array.isArray(data)?data:[];if(!episodes.length){launcher.hidden=true;return}if(currentIndex<0||currentIndex>=episodes.length)currentIndex=0;if(isOpen)render()}).catch(err=>{console.error(err);launcher.hidden=true});
   if('serviceWorker'in navigator){navigator.serviceWorker.register(new URL('offline-podcast-sw.js',base),{scope:base.pathname}).then(async()=>{await navigator.serviceWorker.ready;const cacheCurrent=()=>{if(!navigator.serviceWorker.controller)return;const urls=[location.href,...performance.getEntriesByType('resource').map(e=>e.name)].filter(u=>{try{const x=new URL(u);return x.origin===location.origin&&x.pathname.startsWith(base.pathname)}catch{return false}});navigator.serviceWorker.controller.postMessage({type:'CACHE_URLS',urls:[...new Set(urls)]})};if(navigator.serviceWorker.controller)cacheCurrent();else navigator.serviceWorker.addEventListener('controllerchange',cacheCurrent,{once:true})}).catch(()=>{})}
 })();

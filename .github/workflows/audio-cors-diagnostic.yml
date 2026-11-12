@@ -1,0 +1,38 @@
+name: Publisher audio CORS/range diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/audio-cors-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check publisher CORS and range headers without downloading an episode
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const entries=JSON.parse(readFileSync('public/podcasts/dnd.json','utf8')).filter(e=>e.audio).slice(0,3);
+          if(!entries.length) throw Error('No direct audio source');
+          for(const item of entries){
+            const encoded=item.audio.match(/https%3A%2F%2F[^?#]+/i)?.[0];
+            const options=[['publisher',item.audio]];
+            if(encoded)options.push(['publisher CDN',decodeURIComponent(encoded)]);
+            for(const [kind,url] of options){
+              try{
+                const r=await fetch(url,{redirect:'follow',headers:{Origin:'https://parris-tech-services.github.io',Range:'bytes=0-1'},signal:AbortSignal.timeout(15000)});
+                const result={episode:item.title,kind,status:r.status,range:r.headers.get('content-range'),allowOrigin:r.headers.get('access-control-allow-origin'),type:r.headers.get('content-type'),finalHost:new URL(r.url).hostname};
+                console.log(JSON.stringify(result));
+                await r.body?.cancel();
+              }catch(e){console.log(JSON.stringify({episode:item.title,kind,error:String(e.message||e)}))}
+            }
+          }
+          NODE

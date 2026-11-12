@@ -1,0 +1,8 @@
+{
+  "name": "Whispering Wilds (DRAFT, inferred from existing text)",
+  "given": { "on": ["","","b","d","f","h","l","m","n","r","s","t","w"], "v": ["a","e","i","o","u"], "co": ["","n","r","l","d","s","th"], "syllables": [1,2,2], "length": [3,6] },
+  "surname": { "mode": "word", "words": ["Reed","Fennel","Alder","Thistle","Marsh","Lark","Bracken","Sorrel","Heron","Tarn","Wren","Moss"] },
+  "avoid": ["Elara","Mira","Kael","Lyra","Thorne","Seraphina","Aldric","Theron"],
+  "max_surname_repeats": 1,
+  "reserved": ["Caretaker","Hermit","Ranger"]
+}

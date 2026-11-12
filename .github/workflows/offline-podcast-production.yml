@@ -1,6 +1,11 @@
 name: Whirring Wilderness production offline podcasts
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/offline-podcast-production.mjs'
+      - '.github/workflows/offline-podcast-production.yml'
 permissions:
   contents: read
 concurrency:
@@ -8,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       titles: ${{ steps.m.outputs.titles }}
     steps:
@@ -25,7 +30,7 @@ jobs:
       max-parallel: 12
       matrix:
         title: ${{ fromJSON(needs.prepare.outputs.titles) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
